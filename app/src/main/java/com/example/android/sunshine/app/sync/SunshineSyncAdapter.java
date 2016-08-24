@@ -427,18 +427,15 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter
         // we'll query our contentProvider, as always
         Cursor cursor = context.getContentResolver().query(weatherUri, NOTIFY_WEATHER_PROJECTION, null, null, null);
         if (cursor.moveToFirst()) {
+            final int maxTemp = (int) Math.round(cursor.getDouble(INDEX_MAX_TEMP));
+            final int minTemp = (int) Math.round(cursor.getDouble(INDEX_MIN_TEMP));
             int weatherId = cursor.getInt(INDEX_WEATHER_ID);
-            double maxTemp = cursor.getDouble(INDEX_MAX_TEMP);
-            double minTemp = cursor.getDouble(INDEX_MIN_TEMP);
-            // String desc = cursor.getString(INDEX_SHORT_DESC);  not used
-
-            int weatherIconId = Utility.getIconResourceForWeatherCondition(weatherId);
             //don't include the icon itself, store icons in watch and retrieve there
 
             PutDataMapRequest putWeatherDataMapRequest = PutDataMapRequest.create(Utility.PATH_DATA_MAP).setUrgent();
-            putWeatherDataMapRequest.getDataMap().putInt(Utility.WATCH_KEY_MAX_TEMP, (int) maxTemp);
-            putWeatherDataMapRequest.getDataMap().putInt(Utility.WATCH_KEY_MIN_TEMP, (int) minTemp);
-            putWeatherDataMapRequest.getDataMap().putInt(Utility.WATCH_KEY_WEATHER_ICON, weatherIconId);
+            putWeatherDataMapRequest.getDataMap().putInt(Utility.WATCH_KEY_MAX_TEMP, maxTemp);
+            putWeatherDataMapRequest.getDataMap().putInt(Utility.WATCH_KEY_MIN_TEMP, minTemp);
+            putWeatherDataMapRequest.getDataMap().putInt(Utility.WATCH_KEY_WEATHER_ICON, weatherId);
 
             PutDataRequest putDataRequest = putWeatherDataMapRequest.asPutDataRequest();
 
@@ -450,7 +447,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter
                                 Log.e(LOG_TAG, "sendWeatherToWatch: failed to send data item: "
                                         + dataItemResult.getStatus().getStatusCode());
                             } else {
-                                Log.d(LOG_TAG, "sendWeatherToWatch: data send ok");
+                                Log.d(LOG_TAG, "sendWeatherToWatch ok: " + maxTemp + "-" + minTemp);
                             }
                         }
                     });

@@ -21,6 +21,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -96,8 +98,13 @@ public class WatchFaceService extends CanvasWatchFaceService {
         boolean mRegisteredTimeZoneReceiver = false;
         Paint mBackgroundPaint;
         Paint mTextPaint;
+        Bitmap weatherIconBitmap;
+        float mXOffsetTimeText, mYOffsetTimeText;
+        float mXOffsetTempsText, mYOffsetTempsText;
+        String textTemp;
         boolean mAmbient;
         Time mTime;
+
         final BroadcastReceiver mTimeZoneReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -107,9 +114,6 @@ public class WatchFaceService extends CanvasWatchFaceService {
         };
         int mTapCount;
 
-        float mXOffsetTimeText, mYOffsetTimeText;
-        float mXOffsetTempsText, mYOffsetTempsText;
-        String textTemp;
 
 
         /**
@@ -152,6 +156,7 @@ public class WatchFaceService extends CanvasWatchFaceService {
 
             mTextPaint = new Paint();
             mTextPaint = createTextPaint(resources.getColor(R.color.digital_text));
+            weatherIconBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_clear);
 
             mTime = new Time();
             textTemp = Util.maxTempValue + "c";
@@ -294,6 +299,9 @@ public class WatchFaceService extends CanvasWatchFaceService {
 
             textTemp = Util.maxTempValue + "°" + "  " + Util.minTempValue + "°";
             canvas.drawText(textTemp, mXOffsetTempsText, mYOffsetTempsText, mTextPaint);
+
+            canvas.drawBitmap(weatherIconBitmap, 0, 0, mBackgroundPaint);
+
         }
 
         /**
