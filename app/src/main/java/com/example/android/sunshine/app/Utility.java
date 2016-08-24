@@ -35,6 +35,7 @@ public class Utility {
     public static final String WATCH_KEY_MAX_TEMP = "MAX_TEMP";
     public static final String WATCH_KEY_MIN_TEMP = "MIN_TEMP";
     public static final String WATCH_KEY_WEATHER_ICON = "WEATHER_ICON";
+    public static final String PATH_DATA_MAP = "/weather";
 
     // We'll default our latlong to 0. Yay, "Earth!"
     public static float DEFAULT_LATLONG = 0F;

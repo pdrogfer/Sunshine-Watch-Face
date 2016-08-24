@@ -39,9 +39,14 @@
             android:value="@integer/google_play_services_version" />
 
         <service
-            android:name=".MyService"
+            android:name=".MyDataService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true">
+            <intent-filter>
+                <action
+                    android:name="com.google.android.gms.wearable.BIND_LISTENER" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

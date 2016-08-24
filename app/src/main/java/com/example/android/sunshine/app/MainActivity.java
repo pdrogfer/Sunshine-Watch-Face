@@ -233,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
     }
 
     public void sendWeatherToWatch(int maxTemp, int minTemp, String weatherIcon) {
-        PutDataMapRequest putWeatherDataMapRequest = PutDataMapRequest.create("/weather");
+        PutDataMapRequest putWeatherDataMapRequest = PutDataMapRequest.create(Utility.PATH_DATA_MAP);
         putWeatherDataMapRequest.getDataMap().putInt(Utility.WATCH_KEY_MAX_TEMP, maxTemp);
         putWeatherDataMapRequest.getDataMap().putInt(Utility.WATCH_KEY_MIN_TEMP, minTemp);
         putWeatherDataMapRequest.getDataMap().putString(Utility.WATCH_KEY_WEATHER_ICON, weatherIcon);
