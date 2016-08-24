@@ -2,7 +2,14 @@
 <resources>
     <dimen name="digital_text_size">40dp</dimen>
     <dimen name="digital_text_size_round">45dp</dimen>
-    <dimen name="digital_x_offset">15dp</dimen>
-    <dimen name="digital_x_offset_round">25dp</dimen>
-    <dimen name="digital_y_offset">90dp</dimen>
+
+    <!-- time row, up -->
+    <dimen name="digital_x_offset_time">15dp</dimen>
+    <dimen name="digital_x_offset_time_round">25dp</dimen>
+    <dimen name="digital_y_offset_time">90dp</dimen>
+
+    <!-- temperatures row, below time row -->
+    <dimen name="digital_y_offset_temps">130dp</dimen>
+    <dimen name="digital_x_offset_temps">15dp</dimen>
+    <dimen name="digital_x_offset_temps_round">25dp</dimen>
 </resources>

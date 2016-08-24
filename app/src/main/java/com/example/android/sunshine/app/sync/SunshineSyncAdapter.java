@@ -429,17 +429,17 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements 
             int weatherId = cursor.getInt(INDEX_WEATHER_ID);
             double maxTemp = cursor.getDouble(INDEX_MAX_TEMP);
             double minTemp = cursor.getDouble(INDEX_MIN_TEMP);
-            String desc = cursor.getString(INDEX_SHORT_DESC);
+            // String desc = cursor.getString(INDEX_SHORT_DESC);  not used
 
             int weatherIconId = Utility.getIconResourceForWeatherCondition(weatherId);
             //don't include the icon itself, store icons in watch and retrieve there
 
-            PutDataMapRequest putWeatherDataMapRequest = PutDataMapRequest.create(Utility.PATH_DATA_MAP);
+            PutDataMapRequest putWeatherDataMapRequest = PutDataMapRequest.create(Utility.PATH_DATA_MAP).setUrgent();
             putWeatherDataMapRequest.getDataMap().putInt(Utility.WATCH_KEY_MAX_TEMP, (int) maxTemp);
             putWeatherDataMapRequest.getDataMap().putInt(Utility.WATCH_KEY_MIN_TEMP, (int) minTemp);
             putWeatherDataMapRequest.getDataMap().putInt(Utility.WATCH_KEY_WEATHER_ICON, weatherIconId);
 
-            PutDataRequest putDataRequest = putWeatherDataMapRequest.asPutDataRequest().setUrgent();
+            PutDataRequest putDataRequest = putWeatherDataMapRequest.asPutDataRequest();
 
             Wearable.DataApi.putDataItem(mGoogleApiClient, putDataRequest)
                     .setResultCallback(new ResultCallback<DataApi.DataItemResult>() {
@@ -456,8 +456,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements 
         } else {
             Log.e(LOG_TAG, "notifyWatchFace: No data for watch face");
         }
-
-
+        cursor.close();
     }
 
     private void notifyWeather() {

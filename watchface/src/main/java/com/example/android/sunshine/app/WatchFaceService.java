@@ -99,8 +99,9 @@ public class WatchFaceService extends CanvasWatchFaceService {
         };
         int mTapCount;
 
-        float mXOffset;
-        float mYOffset;
+        float mXOffsetTimeText, mYOffsetTimeText;
+        float mXOffsetTempsText, mYOffsetTempsText;
+
 
         /**
          * Whether the display supports fewer bits for each color in ambient mode. When true, we
@@ -119,7 +120,8 @@ public class WatchFaceService extends CanvasWatchFaceService {
                     .setAcceptsTapEvents(true)
                     .build());
             Resources resources = WatchFaceService.this.getResources();
-            mYOffset = resources.getDimension(R.dimen.digital_y_offset);
+            mYOffsetTimeText = resources.getDimension(R.dimen.digital_y_offset_time);
+            mYOffsetTempsText = resources.getDimension(R.dimen.digital_y_offset_temps);
 
             mBackgroundPaint = new Paint();
             mBackgroundPaint.setColor(resources.getColor(R.color.background));
@@ -187,8 +189,10 @@ public class WatchFaceService extends CanvasWatchFaceService {
             // Load resources that have alternate values for round watches.
             Resources resources = WatchFaceService.this.getResources();
             boolean isRound = insets.isRound();
-            mXOffset = resources.getDimension(isRound
-                    ? R.dimen.digital_x_offset_round : R.dimen.digital_x_offset);
+            mXOffsetTimeText = resources.getDimension(isRound
+                    ? R.dimen.digital_x_offset_time_round : R.dimen.digital_x_offset_time);
+            mXOffsetTempsText = resources.getDimension(isRound
+                    ? R.dimen.digital_x_offset_temps_round : R.dimen.digital_x_offset_temps);
             float textSize = resources.getDimension(isRound
                     ? R.dimen.digital_text_size_round : R.dimen.digital_text_size);
 
@@ -258,10 +262,13 @@ public class WatchFaceService extends CanvasWatchFaceService {
 
             // Draw H:MM in ambient mode or H:MM:SS in interactive mode.
             mTime.setToNow();
-            String text = mAmbient
+            String textTime = mAmbient
                     ? String.format("%d:%02d", mTime.hour, mTime.minute)
                     : String.format("%d:%02d:%02d", mTime.hour, mTime.minute, mTime.second);
-            canvas.drawText(text, mXOffset, mYOffset, mTextPaint);
+            canvas.drawText(textTime, mXOffsetTimeText, mYOffsetTimeText, mTextPaint);
+
+            String textTemp = "25C 24C";
+            canvas.drawText(textTemp, mXOffsetTempsText, mYOffsetTempsText, mTextPaint);
         }
 
         /**
