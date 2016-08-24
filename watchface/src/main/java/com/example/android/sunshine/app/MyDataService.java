@@ -34,6 +34,8 @@ public class MyDataService extends WearableListenerService {
     @Override
     public void onDataChanged(DataEventBuffer dataEvents) {
 
+        int maxTemp, minTemp, weatherIconId;
+
         Log.d(TAG, "onDataChanged: " + dataEvents);
         if (!watchGoogleApiClient.isConnected() || !watchGoogleApiClient.isConnecting()) {
             ConnectionResult connectionResult = watchGoogleApiClient
@@ -51,16 +53,25 @@ public class MyDataService extends WearableListenerService {
                 String path = dataEvent.getDataItem().getUri().getPath();
 
                 if (path.equals("/weather")) {
-                    int maxTemp = dataMap.getInt("MAX_TEMP");
-                    int minTemp = dataMap.getInt("MIN_TEMP");
-                    int weatherIconId = dataMap.getInt("WEATHER_ICON");
+                    maxTemp = dataMap.getInt(Util.MAX_TEMP);
+                    minTemp = dataMap.getInt(Util.MIN_TEMP);
+                    weatherIconId = dataMap.getInt(Util.ICON_ID);
 
                     Log.i(TAG, "onDataChanged: DATA RECEIVED!!! Max " + maxTemp +
                             ", Min " + minTemp +
                             ", iconId " + weatherIconId);
 
+
+                    publishNewWeather(maxTemp, minTemp, weatherIconId);
                 }
             }
         }
+    }
+
+    private void publishNewWeather(int maxTemp, int minTemp, int weatherIconId) {
+
+        Util.maxTempValue = maxTemp;
+        Util.minTempValue = minTemp;
+        Util.iconId = weatherIconId;
     }
 }

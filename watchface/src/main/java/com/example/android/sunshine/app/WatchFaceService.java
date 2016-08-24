@@ -29,11 +29,18 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.wearable.watchface.CanvasWatchFaceService;
 import android.support.wearable.watchface.WatchFaceStyle;
 import android.text.format.Time;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.WindowInsets;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.wearable.Wearable;
 
 import java.lang.ref.WeakReference;
 import java.util.TimeZone;
@@ -44,6 +51,7 @@ import java.util.concurrent.TimeUnit;
  * low-bit ambient mode, the text is drawn without anti-aliasing in ambient mode.
  */
 public class WatchFaceService extends CanvasWatchFaceService {
+    private static final String TAG = "WatchFaceService";
     private static final Typeface NORMAL_TYPEFACE =
             Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL);
 
@@ -101,6 +109,7 @@ public class WatchFaceService extends CanvasWatchFaceService {
 
         float mXOffsetTimeText, mYOffsetTimeText;
         float mXOffsetTempsText, mYOffsetTempsText;
+        String textTemp;
 
 
         /**
@@ -108,6 +117,21 @@ public class WatchFaceService extends CanvasWatchFaceService {
          * disable anti-aliasing in ambient mode.
          */
         boolean mLowBitAmbient;
+
+        GoogleApiClient watchGoogleApiClient;
+
+        private BroadcastReceiver weatherReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Bundle bundle = intent.getExtras();
+                if (bundle != null) {
+                    int maxTemp = bundle.getInt(Util.MAX_TEMP);
+                    int minTemp = bundle.getInt(Util.MIN_TEMP);
+                    int iconId = bundle.getInt(Util.ICON_ID);
+                    Log.i(TAG, "onReceive: TEMPS ON THE UI!!!!");
+                }
+            }
+        };
 
         @Override
         public void onCreate(SurfaceHolder holder) {
@@ -130,6 +154,7 @@ public class WatchFaceService extends CanvasWatchFaceService {
             mTextPaint = createTextPaint(resources.getColor(R.color.digital_text));
 
             mTime = new Time();
+            textTemp = Util.maxTempValue + "c";
         }
 
         @Override
@@ -267,7 +292,7 @@ public class WatchFaceService extends CanvasWatchFaceService {
                     : String.format("%d:%02d:%02d", mTime.hour, mTime.minute, mTime.second);
             canvas.drawText(textTime, mXOffsetTimeText, mYOffsetTimeText, mTextPaint);
 
-            String textTemp = "25C 24C";
+            textTemp = Util.maxTempValue + "°" + "  " + Util.minTempValue + "°";
             canvas.drawText(textTemp, mXOffsetTempsText, mYOffsetTempsText, mTextPaint);
         }
 
@@ -303,6 +328,7 @@ public class WatchFaceService extends CanvasWatchFaceService {
             }
         }
     }
+
 
 
 }
