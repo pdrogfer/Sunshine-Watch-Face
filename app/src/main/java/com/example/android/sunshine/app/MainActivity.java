@@ -43,8 +43,7 @@ import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 
-public class MainActivity extends AppCompatActivity implements ForecastFragment.Callback,
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
+public class MainActivity extends AppCompatActivity implements ForecastFragment.Callback {
 
     private static final String TAG = "MAIN ACTIVITY";
     private final String LOG_TAG = MainActivity.class.getSimpleName();
@@ -54,8 +53,6 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
 
     private boolean mTwoPane;
     private String mLocation;
-    // wear communication
-    private GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,15 +115,6 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
                 startService(intent);
             }
         }
-
-        // Watch Face
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(Wearable.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
-        mGoogleApiClient.connect();
-
     }
 
     @Override
@@ -215,42 +203,5 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
             return false;
         }
         return true;
-    }
-
-    @Override
-    public void onConnected(Bundle bundle) {
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-
-    }
-
-    public void sendWeatherToWatch(int maxTemp, int minTemp, String weatherIcon) {
-        PutDataMapRequest putWeatherDataMapRequest = PutDataMapRequest.create(Utility.PATH_DATA_MAP);
-        putWeatherDataMapRequest.getDataMap().putInt(Utility.WATCH_KEY_MAX_TEMP, maxTemp);
-        putWeatherDataMapRequest.getDataMap().putInt(Utility.WATCH_KEY_MIN_TEMP, minTemp);
-        putWeatherDataMapRequest.getDataMap().putString(Utility.WATCH_KEY_WEATHER_ICON, weatherIcon);
-
-        PutDataRequest putDataRequest = putWeatherDataMapRequest.asPutDataRequest().setUrgent();
-
-        Wearable.DataApi.putDataItem(mGoogleApiClient, putDataRequest)
-                .setResultCallback(new ResultCallback<DataApi.DataItemResult>() {
-                    @Override
-                    public void onResult(@NonNull DataApi.DataItemResult dataItemResult) {
-                        if (!dataItemResult.getStatus().isSuccess()) {
-                            Log.e(TAG, "sendWeatherToWatch: failed to send data item: "
-                                    + dataItemResult.getStatus().getStatusCode());
-                        } else {
-                            Log.d(TAG, "sendWeatherToWatch: data send ok");
-                        }
-                    }
-                });
     }
 }

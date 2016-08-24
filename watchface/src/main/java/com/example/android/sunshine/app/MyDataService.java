@@ -26,9 +26,11 @@ public class MyDataService extends WearableListenerService {
                 if (path.equals("/weather")) {
                     int maxTemp = dataMap.getInt("MAX_TEMP");
                     int minTemp = dataMap.getInt("MIN_TEMP");
-                    String weatherIcon = dataMap.getString("WEATHER_ICON");
+                    int weatherIconId = dataMap.getInt("WEATHER_ICON");
 
-                    Log.i(TAG, "onDataChanged: DATA RECEIVED!!!");
+                    Log.i(TAG, "onDataChanged: DATA RECEIVED!!! Max " + maxTemp +
+                            ", Min " + minTemp +
+                            ", iconId " + weatherIconId);
                 }
             }
         }
