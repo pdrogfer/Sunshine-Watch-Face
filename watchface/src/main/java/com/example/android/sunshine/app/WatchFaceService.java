@@ -148,7 +148,6 @@ public class WatchFaceService extends CanvasWatchFaceService {
             Resources resources = WatchFaceService.this.getResources();
             timeTextOffsetY = resources.getDimension(R.dimen.digital_y_offset_time);
             tempsTextOffsetY = resources.getDimension(R.dimen.digital_y_offset_temps);
-            weatherIconOffsetY = resources.getDimension(R.dimen.weatherIconOffsetY);
 
             mBackgroundPaint = new Paint();
             mBackgroundPaint.setColor(resources.getColor(R.color.background));
@@ -162,7 +161,8 @@ public class WatchFaceService extends CanvasWatchFaceService {
             tempsTextPaint.setTextSize(R.dimen.digital_temp_text_size);
 
             weatherIconBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_clear);
-            weatherIconBitmap = Bitmap.createScaledBitmap(weatherIconBitmap, 50, 50, false);
+            weatherIconBitmap = Bitmap.createScaledBitmap(
+                    weatherIconBitmap, 100, 100, false);
 
             mTime = new Time();
             textTemp = Util.maxTempValue + "c";
@@ -232,6 +232,8 @@ public class WatchFaceService extends CanvasWatchFaceService {
             float textSize = resources.getDimension(isRound
                     ? R.dimen.digital_text_time_size_round : R.dimen.digital_text_time_size);
 
+            weatherIconOffsetY = resources.getDimension(isRound
+                    ? R.dimen.weatherIconOffsetY_round : R.dimen.weatherIconOffsetY);
             timeTextPaint.setTextSize(textSize);
         }
 
@@ -306,7 +308,9 @@ public class WatchFaceService extends CanvasWatchFaceService {
             textTemp = Util.maxTempValue + "°" + "  " + Util.minTempValue + "°";
             canvas.drawText(textTemp, tempsTextOffsetX, tempsTextOffsetY, timeTextPaint);
 
-            canvas.drawBitmap(weatherIconBitmap, (bounds.centerX() - 25), 0, mBackgroundPaint);
+            canvas.drawBitmap(weatherIconBitmap,
+                    (bounds.centerX() - 50),
+                    weatherIconOffsetY, mBackgroundPaint);
 
         }
 
