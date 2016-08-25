@@ -12,4 +12,10 @@
     <dimen name="digital_y_offset_temps">130dp</dimen>
     <dimen name="digital_x_offset_temps">15dp</dimen>
     <dimen name="digital_x_offset_temps_round">25dp</dimen>
+
+    <!-- icon size and location -->
+    <dimen name="weatherIconOffsetX">50dp</dimen>
+    <dimen name="weatherIconOffsetY">50dp</dimen>
+    <dimen name="weatherIconEndRight">100dp</dimen>
+    <dimen name="weatherIconEndBottom">100dp</dimen>
 </resources>

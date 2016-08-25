@@ -31,8 +31,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.wearable.watchface.CanvasWatchFaceService;
 import android.support.wearable.watchface.WatchFaceStyle;
 import android.text.format.Time;
@@ -40,9 +38,7 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.WindowInsets;
 
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.wearable.Wearable;
 
 import java.lang.ref.WeakReference;
 import java.util.TimeZone;
@@ -99,9 +95,11 @@ public class WatchFaceService extends CanvasWatchFaceService {
         Paint mBackgroundPaint;
         Paint mTextPaint;
         Bitmap weatherIconBitmap;
-        float mXOffsetTimeText, mYOffsetTimeText;
-        float mXOffsetTempsText, mYOffsetTempsText;
+        float weatherIconOffsetX, weatherIconOffsetY;
+        float timeTextOffsetX, timeTextOffsetY;
+        float tempsTextOffsetX, tempsTextOffsetY;
         String textTemp;
+        String textTime;
         boolean mAmbient;
         Time mTime;
 
@@ -148,15 +146,18 @@ public class WatchFaceService extends CanvasWatchFaceService {
                     .setAcceptsTapEvents(true)
                     .build());
             Resources resources = WatchFaceService.this.getResources();
-            mYOffsetTimeText = resources.getDimension(R.dimen.digital_y_offset_time);
-            mYOffsetTempsText = resources.getDimension(R.dimen.digital_y_offset_temps);
+            timeTextOffsetY = resources.getDimension(R.dimen.digital_y_offset_time);
+            tempsTextOffsetY = resources.getDimension(R.dimen.digital_y_offset_temps);
+            weatherIconOffsetY = resources.getDimension(R.dimen.weatherIconOffsetY);
 
             mBackgroundPaint = new Paint();
             mBackgroundPaint.setColor(resources.getColor(R.color.background));
 
             mTextPaint = new Paint();
             mTextPaint = createTextPaint(resources.getColor(R.color.digital_text));
+
             weatherIconBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_clear);
+            weatherIconBitmap = Bitmap.createScaledBitmap(weatherIconBitmap, 50, 50, false);
 
             mTime = new Time();
             textTemp = Util.maxTempValue + "c";
@@ -219,9 +220,9 @@ public class WatchFaceService extends CanvasWatchFaceService {
             // Load resources that have alternate values for round watches.
             Resources resources = WatchFaceService.this.getResources();
             boolean isRound = insets.isRound();
-            mXOffsetTimeText = resources.getDimension(isRound
+            timeTextOffsetX = resources.getDimension(isRound
                     ? R.dimen.digital_x_offset_time_round : R.dimen.digital_x_offset_time);
-            mXOffsetTempsText = resources.getDimension(isRound
+            tempsTextOffsetX = resources.getDimension(isRound
                     ? R.dimen.digital_x_offset_temps_round : R.dimen.digital_x_offset_temps);
             float textSize = resources.getDimension(isRound
                     ? R.dimen.digital_text_size_round : R.dimen.digital_text_size);
@@ -292,15 +293,15 @@ public class WatchFaceService extends CanvasWatchFaceService {
 
             // Draw H:MM in ambient mode or H:MM:SS in interactive mode.
             mTime.setToNow();
-            String textTime = mAmbient
+            textTime = mAmbient
                     ? String.format("%d:%02d", mTime.hour, mTime.minute)
                     : String.format("%d:%02d:%02d", mTime.hour, mTime.minute, mTime.second);
-            canvas.drawText(textTime, mXOffsetTimeText, mYOffsetTimeText, mTextPaint);
+            canvas.drawText(textTime, timeTextOffsetX, timeTextOffsetY, mTextPaint);
 
             textTemp = Util.maxTempValue + "°" + "  " + Util.minTempValue + "°";
-            canvas.drawText(textTemp, mXOffsetTempsText, mYOffsetTempsText, mTextPaint);
+            canvas.drawText(textTemp, tempsTextOffsetX, tempsTextOffsetY, mTextPaint);
 
-            canvas.drawBitmap(weatherIconBitmap, 0, 0, mBackgroundPaint);
+            canvas.drawBitmap(weatherIconBitmap, (bounds.centerX() - 25), 0, mBackgroundPaint);
 
         }
 
