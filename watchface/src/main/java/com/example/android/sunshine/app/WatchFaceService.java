@@ -139,12 +139,12 @@ public class WatchFaceService extends CanvasWatchFaceService {
             mBackgroundPaint.setColor(resources.getColor(R.color.background));
 
             timeTextPaint = new Paint();
-            timeTextPaint = createTextPaint(resources.getColor(R.color.digital_text));
-            timeTextPaint.setTextSize(R.dimen.digital_text_time_size);
+            timeTextPaint = createTextPaint(resources.getColor(R.color.digital_text),
+                    R.dimen.digital_text_time_size);
 
             tempsTextPaint = new Paint();
-            tempsTextPaint = createTextPaint(resources.getColor(R.color.digital_text));
-            tempsTextPaint.setTextSize(R.dimen.digital_temp_text_size);
+            tempsTextPaint = createTextPaint(resources.getColor(R.color.digital_text),
+                    R.dimen.digital_temp_text_size);
 
             weatherIconSize = (int) resources.getDimension(R.dimen.weatherIconSize);
             weatherIconBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_clear);
@@ -161,10 +161,11 @@ public class WatchFaceService extends CanvasWatchFaceService {
             super.onDestroy();
         }
 
-        private Paint createTextPaint(int textColor) {
+        private Paint createTextPaint(int textColor, float textSize) {
             Paint paint = new Paint();
             paint.setColor(textColor);
             paint.setTypeface(NORMAL_TYPEFACE);
+            paint.setTextSize(textSize);
             paint.setAntiAlias(true);
             return paint;
         }
@@ -216,12 +217,14 @@ public class WatchFaceService extends CanvasWatchFaceService {
                     ? R.dimen.digital_x_offset_time_round : R.dimen.digital_x_offset_time);
             tempsTextOffsetX = resources.getDimension(isRound
                     ? R.dimen.digital_x_offset_temps_round : R.dimen.digital_x_offset_temps);
-            float textSize = resources.getDimension(isRound
+            float textTimeSize = resources.getDimension(isRound
                     ? R.dimen.digital_text_time_size_round : R.dimen.digital_text_time_size);
-
+            float textTempsSize = resources.getDimension(isRound
+                    ? R.dimen.digital_temp_text_size : R.dimen.digital_temp_text_size);
             weatherIconOffsetY = resources.getDimension(isRound
                     ? R.dimen.weatherIconOffsetY_round : R.dimen.weatherIconOffsetY);
-            timeTextPaint.setTextSize(textSize);
+            timeTextPaint.setTextSize(textTimeSize);
+            tempsTextPaint.setTextSize(textTempsSize);
         }
 
         @Override
@@ -293,12 +296,11 @@ public class WatchFaceService extends CanvasWatchFaceService {
             canvas.drawText(textTime, timeTextOffsetX, timeTextOffsetY, timeTextPaint);
 
             textTemp = Util.maxTempValue + "°" + "  " + Util.minTempValue + "°";
-            canvas.drawText(textTemp, tempsTextOffsetX, tempsTextOffsetY, timeTextPaint);
+            canvas.drawText(textTemp, tempsTextOffsetX, tempsTextOffsetY, tempsTextPaint);
 
             canvas.drawBitmap(weatherIconBitmap,
                     (bounds.centerX() - weatherIconSize/2),
                     weatherIconOffsetY, mBackgroundPaint);
-
         }
 
         /**

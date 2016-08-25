@@ -12,8 +12,8 @@
 
     <!-- temperatures row, below time row -->
     <dimen name="digital_y_offset_temps">160dp</dimen>
-    <dimen name="digital_x_offset_temps">75dp</dimen>
-    <dimen name="digital_x_offset_temps_round">60dp</dimen>
+    <dimen name="digital_x_offset_temps">100dp</dimen>
+    <dimen name="digital_x_offset_temps_round">80dp</dimen>
 
     <!-- icon size and location -->
     <dimen name="weatherIconOffsetX">50dp</dimen>
