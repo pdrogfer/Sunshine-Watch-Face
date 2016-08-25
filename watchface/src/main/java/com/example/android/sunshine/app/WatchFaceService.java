@@ -167,6 +167,7 @@ public class WatchFaceService extends CanvasWatchFaceService {
             paint.setTypeface(NORMAL_TYPEFACE);
             paint.setTextSize(textSize);
             paint.setAntiAlias(true);
+            paint.setTextAlign(Paint.Align.CENTER);
             return paint;
         }
 
@@ -293,14 +294,17 @@ public class WatchFaceService extends CanvasWatchFaceService {
             textTime = mAmbient
                     ? String.format("%d:%02d", mTime.hour, mTime.minute)
                     : String.format("%d:%02d:%02d", mTime.hour, mTime.minute, mTime.second);
-            canvas.drawText(textTime, timeTextOffsetX, timeTextOffsetY, timeTextPaint);
+            canvas.drawText(textTime, bounds.centerX(), timeTextOffsetY, timeTextPaint);
 
             textTemp = Util.maxTempValue + "°" + "  " + Util.minTempValue + "°";
-            canvas.drawText(textTemp, tempsTextOffsetX, tempsTextOffsetY, tempsTextPaint);
+            canvas.drawText(textTemp, bounds.centerX(), tempsTextOffsetY, tempsTextPaint);
 
-            canvas.drawBitmap(weatherIconBitmap,
-                    (bounds.centerX() - weatherIconSize/2),
-                    weatherIconOffsetY, mBackgroundPaint);
+            if (!isInAmbientMode() || !mAmbient || mLowBitAmbient) {
+                canvas.drawBitmap(weatherIconBitmap,
+                        (bounds.centerX() - weatherIconSize/2),
+                        weatherIconOffsetY, mBackgroundPaint);
+                Log.i(TAG, "onDraw: not AmbientMode, notAmbient, notLowBitAmbient");
+            }
         }
 
         /**
