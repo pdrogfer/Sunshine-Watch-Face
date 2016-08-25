@@ -101,6 +101,7 @@ public class WatchFaceService extends CanvasWatchFaceService {
         String textTemp;
         String textTime;
         boolean mAmbient;
+        int weatherIconSize;
         Time mTime;
 
         final BroadcastReceiver mTimeZoneReceiver = new BroadcastReceiver() {
@@ -119,21 +120,6 @@ public class WatchFaceService extends CanvasWatchFaceService {
          * disable anti-aliasing in ambient mode.
          */
         boolean mLowBitAmbient;
-
-        GoogleApiClient watchGoogleApiClient;
-
-        private BroadcastReceiver weatherReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Bundle bundle = intent.getExtras();
-                if (bundle != null) {
-                    int maxTemp = bundle.getInt(Util.MAX_TEMP);
-                    int minTemp = bundle.getInt(Util.MIN_TEMP);
-                    int iconId = bundle.getInt(Util.ICON_ID);
-                    Log.i(TAG, "onReceive: TEMPS ON THE UI!!!!");
-                }
-            }
-        };
 
         @Override
         public void onCreate(SurfaceHolder holder) {
@@ -160,9 +146,10 @@ public class WatchFaceService extends CanvasWatchFaceService {
             tempsTextPaint = createTextPaint(resources.getColor(R.color.digital_text));
             tempsTextPaint.setTextSize(R.dimen.digital_temp_text_size);
 
+            weatherIconSize = (int) resources.getDimension(R.dimen.weatherIconSize);
             weatherIconBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_clear);
             weatherIconBitmap = Bitmap.createScaledBitmap(
-                    weatherIconBitmap, 100, 100, false);
+                    weatherIconBitmap, weatherIconSize, weatherIconSize, false);
 
             mTime = new Time();
             textTemp = Util.maxTempValue + "c";
@@ -309,7 +296,7 @@ public class WatchFaceService extends CanvasWatchFaceService {
             canvas.drawText(textTemp, tempsTextOffsetX, tempsTextOffsetY, timeTextPaint);
 
             canvas.drawBitmap(weatherIconBitmap,
-                    (bounds.centerX() - 50),
+                    (bounds.centerX() - weatherIconSize/2),
                     weatherIconOffsetY, mBackgroundPaint);
 
         }

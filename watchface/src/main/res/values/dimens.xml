@@ -21,5 +21,5 @@
     <dimen name="weatherIconOffsetY_round">25dp</dimen>
     <dimen name="weatherIconEndRight">100dp</dimen>
     <dimen name="weatherIconEndBottom">100dp</dimen>
-    <dimen name="weatherIconSize">100dp</dimen>
+    <dimen name="weatherIconSize">50dp</dimen>
 </resources>
