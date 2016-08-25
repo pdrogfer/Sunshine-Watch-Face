@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="digital_text_size">40dp</dimen>
-    <dimen name="digital_text_size_round">45dp</dimen>
+    <!-- all text sizes -->
+    <dimen name="digital_text_time_size">40dp</dimen>
+    <dimen name="digital_text_time_size_round">45dp</dimen>
+    <dimen name="digital_temp_text_size">30dp</dimen>
 
     <!-- time row, up -->
     <dimen name="digital_x_offset_time">15dp</dimen>
     <dimen name="digital_x_offset_time_round">25dp</dimen>
-    <dimen name="digital_y_offset_time">90dp</dimen>
+    <dimen name="digital_y_offset_time">120dp</dimen>
 
     <!-- temperatures row, below time row -->
-    <dimen name="digital_y_offset_temps">130dp</dimen>
-    <dimen name="digital_x_offset_temps">15dp</dimen>
-    <dimen name="digital_x_offset_temps_round">25dp</dimen>
+    <dimen name="digital_y_offset_temps">160dp</dimen>
+    <dimen name="digital_x_offset_temps">75dp</dimen>
+    <dimen name="digital_x_offset_temps_round">60dp</dimen>
 
     <!-- icon size and location -->
     <dimen name="weatherIconOffsetX">50dp</dimen>
-    <dimen name="weatherIconOffsetY">50dp</dimen>
+    <dimen name="weatherIconOffsetY">100dp</dimen>
     <dimen name="weatherIconEndRight">100dp</dimen>
     <dimen name="weatherIconEndBottom">100dp</dimen>
 </resources>

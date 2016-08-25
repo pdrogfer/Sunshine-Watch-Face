@@ -93,7 +93,7 @@ public class WatchFaceService extends CanvasWatchFaceService {
         final Handler mUpdateTimeHandler = new EngineHandler(this);
         boolean mRegisteredTimeZoneReceiver = false;
         Paint mBackgroundPaint;
-        Paint mTextPaint;
+        Paint timeTextPaint, tempsTextPaint;
         Bitmap weatherIconBitmap;
         float weatherIconOffsetX, weatherIconOffsetY;
         float timeTextOffsetX, timeTextOffsetY;
@@ -153,8 +153,13 @@ public class WatchFaceService extends CanvasWatchFaceService {
             mBackgroundPaint = new Paint();
             mBackgroundPaint.setColor(resources.getColor(R.color.background));
 
-            mTextPaint = new Paint();
-            mTextPaint = createTextPaint(resources.getColor(R.color.digital_text));
+            timeTextPaint = new Paint();
+            timeTextPaint = createTextPaint(resources.getColor(R.color.digital_text));
+            timeTextPaint.setTextSize(R.dimen.digital_text_time_size);
+
+            tempsTextPaint = new Paint();
+            tempsTextPaint = createTextPaint(resources.getColor(R.color.digital_text));
+            tempsTextPaint.setTextSize(R.dimen.digital_temp_text_size);
 
             weatherIconBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_clear);
             weatherIconBitmap = Bitmap.createScaledBitmap(weatherIconBitmap, 50, 50, false);
@@ -225,9 +230,9 @@ public class WatchFaceService extends CanvasWatchFaceService {
             tempsTextOffsetX = resources.getDimension(isRound
                     ? R.dimen.digital_x_offset_temps_round : R.dimen.digital_x_offset_temps);
             float textSize = resources.getDimension(isRound
-                    ? R.dimen.digital_text_size_round : R.dimen.digital_text_size);
+                    ? R.dimen.digital_text_time_size_round : R.dimen.digital_text_time_size);
 
-            mTextPaint.setTextSize(textSize);
+            timeTextPaint.setTextSize(textSize);
         }
 
         @Override
@@ -248,7 +253,7 @@ public class WatchFaceService extends CanvasWatchFaceService {
             if (mAmbient != inAmbientMode) {
                 mAmbient = inAmbientMode;
                 if (mLowBitAmbient) {
-                    mTextPaint.setAntiAlias(!inAmbientMode);
+                    timeTextPaint.setAntiAlias(!inAmbientMode);
                 }
                 invalidate();
             }
@@ -296,10 +301,10 @@ public class WatchFaceService extends CanvasWatchFaceService {
             textTime = mAmbient
                     ? String.format("%d:%02d", mTime.hour, mTime.minute)
                     : String.format("%d:%02d:%02d", mTime.hour, mTime.minute, mTime.second);
-            canvas.drawText(textTime, timeTextOffsetX, timeTextOffsetY, mTextPaint);
+            canvas.drawText(textTime, timeTextOffsetX, timeTextOffsetY, timeTextPaint);
 
             textTemp = Util.maxTempValue + "°" + "  " + Util.minTempValue + "°";
-            canvas.drawText(textTemp, tempsTextOffsetX, tempsTextOffsetY, mTextPaint);
+            canvas.drawText(textTemp, tempsTextOffsetX, tempsTextOffsetY, timeTextPaint);
 
             canvas.drawBitmap(weatherIconBitmap, (bounds.centerX() - 25), 0, mBackgroundPaint);
 
